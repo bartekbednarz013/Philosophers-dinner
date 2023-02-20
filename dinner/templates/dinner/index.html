@@ -13,23 +13,27 @@
     />
   </head>
   <body>
-    <div class="header-wrapper">
+    <div class="header-wrapper" id="header">
       <div class="page-header">
         <h1>Dining philosophers</h1>
         <p class="header-description">blah blah blah</p>
       </div>
       <div class="options-wrapper">
         <div class="options">
-          <form onsubmit="event.preventDefault(); letsGetItStarted()">
+          <form id="options-form">
             <div class="option implementation">
               <div class="option-header">Implementation</div>
               <div class="implementation-switch">
-                <div class="option-text left-option-text">multiprocessing</div>
+                <div class="option-text left-option-text">multithreading</div>
                 <label class="switch">
-                  <input type="checkbox" id="implementation-checkbox" />
+                  <input
+                    type="checkbox"
+                    id="implementation-checkbox"
+                    disabled="True"
+                  />
                   <span class="slider round"></span>
                 </label>
-                <div class="option-text right-option-text">multithreading</div>
+                <div class="option-text right-option-text">multiprocessing</div>
               </div>
             </div>
             <div class="option with-waiter">
@@ -37,7 +41,12 @@
               <div class="waiter-switch">
                 <div class="option-text left-option-text">no</div>
                 <label class="switch">
-                  <input type="checkbox" id="waiter-checkbox" />
+                  <input
+                    type="checkbox"
+                    id="waiter-checkbox"
+                    checked="True"
+                    disabled="True"
+                  />
                   <span class="slider round"></span>
                 </label>
                 <div class="option-text right-option-text">yes</div>
@@ -63,30 +72,30 @@
         </div>
       </div>
     </div>
-    <div class="dinner-wrapper">
+    <div class="dinner-wrapper" id="dinner-wrapper">
       <div class="dinner">
         <div class="dining-room">
           <div class="seat first-seat">
-            <div class="seat-content seat-content-0"></div>
+            <div class="seat-content seat-content-0" id="seat0"></div>
           </div>
           <div class="seat second-seat">
-            <div class="seat-content seat-content-1"></div>
+            <div class="seat-content seat-content-1" id="seat1"></div>
           </div>
           <div class="seat third-seat">
-            <div class="seat-content seat-content-2"></div>
+            <div class="seat-content seat-content-2" id="seat2"></div>
           </div>
           <div class="seat fourth-seat">
-            <div class="seat-content seat-content-3">Arystoteles</div>
+            <div class="seat-content seat-content-3" id="seat3"></div>
           </div>
           <div class="seat fifth-seat">
-            <div class="seat-content seat-content-4">Sokrates</div>
+            <div class="seat-content seat-content-4" id="seat4"></div>
           </div>
           <div class="dinner-table">
-            <div class="plate first-plate">1.</div>
-            <div class="plate second-plate">2.</div>
-            <div class="plate third-plate">3.</div>
-            <div class="plate fourth-plate">4.</div>
-            <div class="plate fifth-plate">5.</div>
+            <div class="plate first-plate">0.</div>
+            <div class="plate second-plate">1.</div>
+            <div class="plate third-plate">2.</div>
+            <div class="plate fourth-plate">3.</div>
+            <div class="plate fifth-plate">4.</div>
             <div class="fork fork-0">
               <svg
                 width="100%"
@@ -217,8 +226,8 @@
         <div class="waiter">
           <img id="waiter-img" src="static/images/waiter.png" />
         </div>
-        <div class="waiting-room">
-          <div class="patient-guest">Nietzsche</div>
+        <div class="waiting-room" id="waiting-room">
+          <!-- <div class="patient-guest">Nietzsche</div> -->
         </div>
         <div class="library">
           <img src="static/images/bookshelf.png" />
@@ -226,24 +235,7 @@
             <span class="shelf"></span>
             <span class="shelf"></span>
             <span class="shelf"></span>
-            <div class="books" id="books">
-              <!-- max 44 books  -->
-              <!-- <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div>
-              <div class="book">1</div> -->
-            </div>
+            <div class="books" id="books"><!-- max 44 books  --></div>
           </div>
         </div>
       </div>
@@ -256,67 +248,76 @@
             <col style="min-width: 80px" />
             <col style="min-width: 80px" />
             <col style="min-width: 80px" />
+            <col style="min-width: 150px"
           </colgroup>
           <thead>
             <tr>
               <th>Philosopher</th>
-              <th>Book</th>
               <th>Seat</th>
               <th>Left</th>
               <th>Right</th>
               <th>Eats</th>
+              <th>Book</th>
+              <th>Read</th>
             </tr>
           </thead>
           <tbody>
             <tr id="Sokrates-tr">
               <td>Sokrates</td>
-              <td></td>
-              <td>5</td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td class="clr-td" id="Sokrates-seat"></td>
+              <td class="clr-td" id="Sokrates-left-fork"></td>
+              <td class="clr-td" id="Sokrates-right-fork"></td>
+              <td class="clr-td" id="Sokrates-eats"></td>
+              <td class="clr-td" id="Sokrates-book"></td>
+              <td class="clr-td" id="Sokrates-read"></td>
             </tr>
             <tr id="Platon-tr">
               <td>Platon</td>
-              <td></td>
-              <td>4</td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td class="clr-td" id="Platon-seat"></td>
+              <td class="clr-td" id="Platon-left-fork"></td>
+              <td class="clr-td" id="Platon-right-fork"></td>
+              <td class="clr-td" id="Platon-eats"></td>
+              <td class="clr-td" id="Platon-book"></td>
+              <td class="clr-td" id="Platon-read"></td>
             </tr>
             <tr id="Nietzsche-tr">
               <td>Nietzsche</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td class="clr-td" id="Nietzsche-seat"></td>
+              <td class="clr-td" id="Nietzsche-left-fork"></td>
+              <td class="clr-td" id="Nietzsche-right-fork"></td>
+              <td class="clr-td" id="Nietzsche-eats"></td>
+              <td class="clr-td" id="Nietzsche-book"></td>
+              <td class="clr-td" id="Nietzsche-read"></td>
             </tr>
             <tr id="Arystoteles-tr">
               <td>Arystoteles</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td class="clr-td" id="Arystoteles-seat"></td>
+              <td class="clr-td" id="Arystoteles-left-fork"></td>
+              <td class="clr-td" id="Arystoteles-right-fork"></td>
+              <td class="clr-td" id="Arystoteles-eats"></td>
+              <td class="clr-td" id="Arystoteles-book"></td>
+              <td class="clr-td" id="Arystoteles-read"></td>
             </tr>
             <tr id="Kant-tr">
               <td>Kant</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td class="clr-td" id="Kant-seat"></td>
+              <td class="clr-td" id="Kant-left-fork"></td>
+              <td class="clr-td" id="Kant-right-fork"></td>
+              <td class="clr-td" id="Kant-eats"></td>
+              <td class="clr-td" id="Kant-book"></td>
+              <td class="clr-td" id="Kant-read"></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="history">
+      <div class="history" id="history">
         <div class="history-header">History</div>
-        <div class="status">something happened 1</div>
-        <div class="status">something happened. 2</div>
-        <div class="status">something happened.. 3</div>
-        <div class="status">something happened... 4</div>
+        <div class="statuses" id="statuses">
+          <!-- <div class="status">something happened 1</div>
+          <div class="status">something happened. 2</div>
+          <div class="status">something happened.. 3</div>
+          <div class="status">something happened... 4</div> -->
+        </div>
       </div>
     </div>
     <script src="{% static 'js/script.js' %}" type="text/javascript"></script>
