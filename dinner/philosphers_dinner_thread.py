@@ -213,7 +213,7 @@ class Philosopher(Thread):
 
 
 class DinnerMultithreading:
-    def __init__(self, websocket, guests_list: list, how_many_books: int, time: int, control=True):
+    def __init__(self, websocket, guests_list: list, how_many_books: int, time: float, control=True):
         self.guests = guests_list
         self.how_many_seats = len(guests_list)
         self.seats = [Lock() for guest in guests_list]
@@ -229,7 +229,7 @@ class DinnerMultithreading:
 
         self.websocket.send(
             text_data=json.dumps(
-                {"type": "dinner_started", "message": "Dinner started!", "time": datetime.now().strftime("%H:%M:%S.%f")}
+                {"type": "dinner", "action": "dinner_started", "message": "Dinner started!", "time": datetime.now().strftime("%H:%M:%S.%f")}
             )
         )
 

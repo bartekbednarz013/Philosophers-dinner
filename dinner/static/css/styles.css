@@ -81,7 +81,8 @@ body::-webkit-scrollbar {
 }
 
 .implementation-switch,
-.waiter-switch {
+.waiter-switch,
+.duration-range {
   display: flex;
   align-items: center;
   column-gap: 15px;
@@ -183,9 +184,39 @@ input::-webkit-inner-spin-button {
   height: 50%;
 }
 
+.duration-slider {
+  -webkit-appearance: none;
+  width: 50%;
+  height: 8px;
+  background: #ccc;
+  border-radius: 4px;
+  outline: none;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.duration-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: solid 2px #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.duration-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: solid 2px #ccc;
+  background: white;
+  cursor: pointer;
+}
+
 .start-dinner-button,
-.stop-dinner-button,
-.terminate-dinner-button {
+.stop-dinner-button {
   color: white;
   background-color: rgb(81, 82, 250);
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 1px 0px, #ccc 0px 0px 0px 1px,
@@ -207,11 +238,6 @@ input::-webkit-inner-spin-button {
 }
 
 .stop-dinner-button {
-  background-color: red;
-  display: none;
-}
-
-.terminate-dinner-button {
   background-color: red;
   display: none;
 }
@@ -546,8 +572,6 @@ td {
 
 .status {
   width: 100%;
-  min-height: 35px;
-  height: fit-content;
   padding: 5px 20px;
   line-height: 25px;
   font-size: 14px;
@@ -561,10 +585,6 @@ td {
 
 .special-status {
   background-color: hotpink;
-}
-
-.end-status {
-  height: 70px;
 }
 
 .end-status a {

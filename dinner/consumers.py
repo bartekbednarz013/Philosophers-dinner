@@ -21,7 +21,7 @@ class DinnerConsumer(WebsocketConsumer):
             implementation = data["implementation"]
             waiter = data["waiter"]
             how_many_books = int(data["how_many_books"])
-            time = data["time"]
+            time = float(data["duration"])
 
             guests = ["Sokrates", "Platon", "Nietzsche", "Arystoteles", "Kant"]
 
