@@ -41,12 +41,7 @@
               <div class="waiter-switch">
                 <div class="option-text left-option-text">no</div>
                 <label class="switch">
-                  <input
-                    type="checkbox"
-                    id="waiter-checkbox"
-                    checked="True"
-                    disabled="True"
-                  />
+                  <input type="checkbox" id="waiter-checkbox" checked="True" />
                   <span class="slider round"></span>
                 </label>
                 <div class="option-text right-option-text">yes</div>
@@ -69,6 +64,12 @@
               value="Start dinner"
             />
           </form>
+          <input
+            class="stop-dinner-button"
+            id="stop-dinner-button"
+            type="button"
+            value="Stop dinner"
+          />
         </div>
       </div>
     </div>
@@ -269,7 +270,7 @@
               <td class="clr-td" id="Sokrates-right-fork"></td>
               <td class="clr-td" id="Sokrates-eats"></td>
               <td class="clr-td" id="Sokrates-book"></td>
-              <td class="clr-td" id="Sokrates-read"></td>
+              <td class="clr-td td-read" id="Sokrates-read"></td>
             </tr>
             <tr id="Platon-tr">
               <td>Platon</td>
@@ -278,7 +279,7 @@
               <td class="clr-td" id="Platon-right-fork"></td>
               <td class="clr-td" id="Platon-eats"></td>
               <td class="clr-td" id="Platon-book"></td>
-              <td class="clr-td" id="Platon-read"></td>
+              <td class="clr-td td-read" id="Platon-read"></td>
             </tr>
             <tr id="Nietzsche-tr">
               <td>Nietzsche</td>
@@ -287,7 +288,7 @@
               <td class="clr-td" id="Nietzsche-right-fork"></td>
               <td class="clr-td" id="Nietzsche-eats"></td>
               <td class="clr-td" id="Nietzsche-book"></td>
-              <td class="clr-td" id="Nietzsche-read"></td>
+              <td class="clr-td td-read" id="Nietzsche-read"></td>
             </tr>
             <tr id="Arystoteles-tr">
               <td>Arystoteles</td>
@@ -296,7 +297,7 @@
               <td class="clr-td" id="Arystoteles-right-fork"></td>
               <td class="clr-td" id="Arystoteles-eats"></td>
               <td class="clr-td" id="Arystoteles-book"></td>
-              <td class="clr-td" id="Arystoteles-read"></td>
+              <td class="clr-td td-read" id="Arystoteles-read"></td>
             </tr>
             <tr id="Kant-tr">
               <td>Kant</td>
@@ -305,7 +306,7 @@
               <td class="clr-td" id="Kant-right-fork"></td>
               <td class="clr-td" id="Kant-eats"></td>
               <td class="clr-td" id="Kant-book"></td>
-              <td class="clr-td" id="Kant-read"></td>
+              <td class="clr-td td-read" id="Kant-read"></td>
             </tr>
           </tbody>
         </table>
@@ -313,10 +314,7 @@
       <div class="history" id="history">
         <div class="history-header">History</div>
         <div class="statuses" id="statuses">
-          <!-- <div class="status">something happened 1</div>
-          <div class="status">something happened. 2</div>
-          <div class="status">something happened.. 3</div>
-          <div class="status">something happened... 4</div> -->
+          <!-- <div class="status">something happened 1</div> -->
         </div>
       </div>
     </div>

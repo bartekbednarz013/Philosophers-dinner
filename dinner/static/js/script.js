@@ -1,4 +1,19 @@
+const implementation_checkbox = document.getElementById(
+  'implementation-checkbox'
+);
+const waiter_checkbox = document.getElementById('waiter-checkbox');
+const waiter_img = document.getElementById('waiter-img');
+const bookshelf = document.getElementById('books');
 const history = document.getElementById('statuses');
+const start_dinner_button = document.getElementById('start-dinner-button');
+const stop_dinner_button = document.getElementById('stop-dinner-button');
+
+let dinner_status = false;
+let dinner_stopped = false;
+
+let last_message_time = 0;
+let run_deadlockRadar = false;
+let deadlock = false;
 
 let url = `ws://${window.location.host}/ws/`;
 
@@ -6,13 +21,31 @@ const dinnerSocket = new WebSocket(url);
 
 dinnerSocket.onmessage = function (e) {
   let data = JSON.parse(e.data);
-  // console.log('Data:', data);
 
-  if (data.type == 'dinner' && data.message) {
+  last_message_time = Date.now();
+
+  if (data.type == 'dinner-start') {
+    let time = new Date();
+    history.insertAdjacentHTML(
+      'afterbegin',
+      `<div class="status special-status">${data.message}    [${data.time}]</div>`
+    );
+  }
+
+  if (data.message) {
     const html = data.duration
-      ? `<div class="status special-status  end-status">${data.message} Duration: ${data.duration}s    [${data.time}]<br><a href="#header">Try again!</a></div>`
+      ? `<div class="status special-status  end-status">${
+          data.message
+        } Duration: ${data.duration.toFixed(6)}s    [${
+          data.time
+        }]<br><a href="#header">Try again!</a></div>`
       : `<div class="status special-status">${data.message}    [${data.time}]</div>`;
     history.insertAdjacentHTML('afterbegin', html);
+    if (data.type == 'dinner_started') {
+      if (run_deadlockRadar) {
+        deadlockRadar();
+      }
+    }
   }
 
   if (data.action) {
@@ -106,29 +139,39 @@ dinnerSocket.onmessage = function (e) {
       document.getElementById(`${data.person}-tr`).style.backgroundColor =
         'rgba(255, 95, 165, 0.2)';
     }
+    if (data.action == 'evacuation') {
+      history.insertAdjacentHTML(
+        'afterbegin',
+        `<div class="status">${data.person} left.   [${data.time}]</div>`
+      );
+      document.getElementById(`${data.person}-tr`).style.backgroundColor =
+        'rgba(255, 95, 165, 0.2)';
+    }
+    if (data.action == 'dinner_ended') {
+      dinner_status = false;
+      stop_dinner_button.style.display = 'none';
+      start_dinner_button.style.display = 'block';
+      unlockBackend();
+    }
   }
 };
-
-const implementation_checkbox = document.getElementById(
-  'implementation-checkbox'
-);
-const waiter_checkbox = document.getElementById('waiter-checkbox');
-const waiter_img = document.getElementById('waiter-img');
-const bookshelf = document.getElementById('books');
 
 const form = document.getElementById('options-form');
 form.addEventListener('submit', (e) => {
   e.preventDefault();
-  letsGetItStarted();
+  if (dinner_status == false) {
+    letsGetItStarted();
+  }
 });
 
-function letsGetItStarted() {
-  reset_dinner();
+const letsGetItStarted = () => {
+  resetDinner();
 
   const implementation = implementation_checkbox.checked
     ? 'multiprocessing'
     : 'multithreading';
   const waiter = waiter_checkbox.checked;
+  run_deadlockRadar = !waiter;
   const how_many_books = document.getElementById('how-many-books-input').value;
   if (waiter) {
     waiter_img.style.display = 'block';
@@ -143,17 +186,22 @@ function letsGetItStarted() {
   }
 
   let data = {
+    action: 'start_dinner',
     implementation: implementation,
     waiter: waiter,
     how_many_books: how_many_books,
     time: 1,
   };
+
   dinnerSocket.send(JSON.stringify(data));
 
+  dinner_status = true;
+  start_dinner_button.style.display = 'none';
+  stop_dinner_button.style.display = 'block';
   document.getElementById('dinner-wrapper').scrollIntoView();
-}
+};
 
-function reset_dinner() {
+const resetDinner = () => {
   bookshelf.innerHTML = '';
   const tds = document.getElementsByClassName('clr-td');
   Array.from(tds).forEach((td) => {
@@ -164,4 +212,59 @@ function reset_dinner() {
     tr.style.backgroundColor = 'unset';
   });
   history.innerHTML = '';
+  dinner_stopped = false;
+  stop_dinner_button.style.backgroundColor = 'red';
+};
+
+stop_dinner_button.addEventListener('click', (e) => {
+  if (dinner_status && !dinner_stopped) {
+    stopDinner();
+    history.insertAdjacentHTML(
+      'afterbegin',
+      `<div class="status special-status">You decided to end dinner. Everybody will finish what they're doing and leave</div>`
+    );
+    dinner_stopped = true;
+    stop_dinner_button.style.backgroundColor = 'grey';
+    stop_dinner_button.disabled = 'True';
+    document.getElementById('dinner-wrapper').scrollIntoView();
+  }
+});
+
+const stopDinner = () => {
+  let data = {
+    action: 'stop_dinner',
+  };
+  dinnerSocket.send(JSON.stringify(data));
+};
+
+const unlockBackend = () => {
+  let data = {
+    action: 'unlock',
+  };
+  dinnerSocket.send(JSON.stringify(data));
+};
+
+let intervalID = 0;
+
+const deadlockRadar = () => {
+  intervalID = setInterval(checkLastMessageTime, 2000);
+};
+
+function checkLastMessageTime() {
+  if (dinner_status == true) {
+    let time = Date.now();
+    if (time - last_message_time > 4000) {
+      console.log('deadlock');
+      deadlock = true;
+      history.insertAdjacentHTML(
+        'afterbegin',
+        `<div class="status  special-status">DEADLOCK - You have to reset your server</div>`
+      );
+      clearInterval(intervalID);
+      terminate_dinner_button.style.display = 'block';
+      stop_dinner_button.style.display = 'none';
+    }
+  } else {
+    clearInterval(intervalID);
+  }
 }
