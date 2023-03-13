@@ -1,40 +1,46 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
+import threading
 
-from .philosphers_dinner_process import Process
-from .philosphers_dinner_thread import ThreadDinner
+from .philosphers_dinner_thread import DinnerMultithreading
+
 
 class DinnerConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
-
-        self.send(text_data=json.dumps({"type": "connection_established", "message": "You are now connected!"}))
+        self.send(text_data=json.dumps({"type": "connection", "status": "True"}))
+        self.dinner_status = False
 
     def receive(self, text_data):
         data = json.loads(text_data)
-        implementation = data["implementation"]
-        waiter = data["waiter"]
-        how_many_books = int(data["how_many_books"])
-        time = data["time"]
+        action = data["action"]
 
-        guests = ["Sokrates", "Platon", "Nietzsche", "Arystoteles", "Kant"]
+        if not self.dinner_status and action == "start_dinner":
+            waiter = data["waiter"]
+            how_many_books = int(data["how_many_books"])
+            time = float(data["duration"])
+            guests = ["Socrates", "Plato", "Aristotle", "Kant", "Nietzsche"]
 
-        # print(
-        #     "Implementation: {}\nWaiter: {}\nBooks: {}".format(
-        #         implementation, "yep" if waiter else "nope", how_many_books
-        #     )
-        # )
-        # print()
+            dinner = DinnerMultithreading(self, guests, how_many_books, time, waiter)
+            self.thread = DinnerThread(dinner)
+            self.thread.start()
+            self.dinner_status = True
 
-        if implementation == "multiprocessing":
-            # dinner = ProcessDinner(guests, how_many_books, waiter)
-            # dinner.lets_get_it_started()
-            self.send(text_data=json.dumps({"type": "Error", "message": "Multiprocessing option is unavailable."}))
-        else:
-            dinner = ThreadDinner(self, guests, how_many_books, time, waiter)
-            dinner.lets_get_it_started()
+        if self.dinner_status and action == "stop_dinner":
+            self.thread.stop()
+            self.dinner_status = False
+
+        if action == "unlock":
+            self.dinner_status = False
 
 
-    # def dinner_message(self, event):
-    #     message = event["message"]
-    #     await self.send(text_data=json.dumps({"type": "dinner", "message": message}))
+class DinnerThread(threading.Thread):
+    def __init__(self, dinner):
+        threading.Thread.__init__(self)
+        self.dinner = dinner
+
+    def run(self):
+        self.dinner.lets_get_it_started()
+
+    def stop(self):
+        self.dinner.stop()

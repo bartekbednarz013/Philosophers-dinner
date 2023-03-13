@@ -15,38 +15,33 @@
   <body>
     <div class="header-wrapper" id="header">
       <div class="page-header">
-        <h1>Dining philosophers</h1>
-        <p class="header-description">blah blah blah</p>
+        <h1>Philosophers dinner</h1>
+        <div class="description-wrapper">
+          <p class="dinner-description">
+            Multithreading implementation of solution of the Dining Philosophers
+            Problem, but this time our philosophers are reading while eating.
+            Dinner ends when everybody read all of the books. Each philospher
+            choose book he hadn't already read, next choose seat and try to get
+            forks. All choices are random. Waiter watches over the dinner and
+            allows max four people to the table at the time.
+          </p>
+          <p class="instruction">
+            Decide how many books are on the bookcase and adjust how long
+            philosophers eat, duration of other actions will change accordingly.
+            You can also choose if waiter should be present, but be careful - it
+            might end bad.
+          </p>
+        </div>
       </div>
       <div class="options-wrapper">
         <div class="options">
           <form id="options-form">
-            <div class="option implementation">
-              <div class="option-header">Implementation</div>
-              <div class="implementation-switch">
-                <div class="option-text left-option-text">multithreading</div>
-                <label class="switch">
-                  <input
-                    type="checkbox"
-                    id="implementation-checkbox"
-                    disabled="True"
-                  />
-                  <span class="slider round"></span>
-                </label>
-                <div class="option-text right-option-text">multiprocessing</div>
-              </div>
-            </div>
             <div class="option with-waiter">
               <div class="option-header">With waiter</div>
               <div class="waiter-switch">
                 <div class="option-text left-option-text">no</div>
                 <label class="switch">
-                  <input
-                    type="checkbox"
-                    id="waiter-checkbox"
-                    checked="True"
-                    disabled="True"
-                  />
+                  <input type="checkbox" id="waiter-checkbox" checked="True" />
                   <span class="slider round"></span>
                 </label>
                 <div class="option-text right-option-text">yes</div>
@@ -62,6 +57,22 @@
                 max="44"
               />
             </div>
+            <div class="option duration">
+              <div class="option-header">Duration</div>
+              <div class="duration-range">
+                <div class="option-text left-option-text">0.5s</div>
+                <input
+                  type="range"
+                  class="duration-slider"
+                  id="duration-input"
+                  min="0.5"
+                  max="2"
+                  step="0.05"
+                  value="1.25"
+                />
+                <div class="option-text right-option-text">2s</div>
+              </div>
+            </div>
             <input
               class="start-dinner-button"
               id="start-dinner-button"
@@ -69,6 +80,12 @@
               value="Start dinner"
             />
           </form>
+          <input
+            class="stop-dinner-button"
+            id="stop-dinner-button"
+            type="button"
+            value="Stop dinner"
+          />
         </div>
       </div>
     </div>
@@ -96,7 +113,7 @@
             <div class="plate third-plate">2.</div>
             <div class="plate fourth-plate">3.</div>
             <div class="plate fifth-plate">4.</div>
-            <div class="fork fork-0">
+            <div class="fork fork-0" id="fork0">
               <svg
                 width="100%"
                 height="100%"
@@ -121,7 +138,7 @@
                 ></path>
               </svg>
             </div>
-            <div class="fork fork-1">
+            <div class="fork fork-1" id="fork1">
               <svg
                 width="100%"
                 height="100%"
@@ -146,7 +163,7 @@
                 ></path>
               </svg>
             </div>
-            <div class="fork fork-2">
+            <div class="fork fork-2" id="fork2">
               <svg
                 width="100%"
                 height="100%"
@@ -171,7 +188,7 @@
                 ></path>
               </svg>
             </div>
-            <div class="fork fork-3">
+            <div class="fork fork-3" id="fork3">
               <svg
                 width="100%"
                 height="100%"
@@ -196,7 +213,7 @@
                 ></path>
               </svg>
             </div>
-            <div class="fork fork-4">
+            <div class="fork fork-4" id="fork4">
               <svg
                 width="100%"
                 height="100%"
@@ -262,41 +279,32 @@
             </tr>
           </thead>
           <tbody>
-            <tr id="Sokrates-tr">
-              <td>Sokrates</td>
-              <td class="clr-td" id="Sokrates-seat"></td>
-              <td class="clr-td" id="Sokrates-left-fork"></td>
-              <td class="clr-td" id="Sokrates-right-fork"></td>
-              <td class="clr-td" id="Sokrates-eats"></td>
-              <td class="clr-td" id="Sokrates-book"></td>
-              <td class="clr-td" id="Sokrates-read"></td>
+            <tr id="Socrates-tr">
+              <td>Socrates</td>
+              <td class="clr-td" id="Socrates-seat"></td>
+              <td class="clr-td" id="Socrates-left-fork"></td>
+              <td class="clr-td" id="Socrates-right-fork"></td>
+              <td class="clr-td" id="Socrates-eats"></td>
+              <td class="clr-td" id="Socrates-book"></td>
+              <td class="clr-td td-read" id="Socrates-read"></td>
             </tr>
-            <tr id="Platon-tr">
-              <td>Platon</td>
-              <td class="clr-td" id="Platon-seat"></td>
-              <td class="clr-td" id="Platon-left-fork"></td>
-              <td class="clr-td" id="Platon-right-fork"></td>
-              <td class="clr-td" id="Platon-eats"></td>
-              <td class="clr-td" id="Platon-book"></td>
-              <td class="clr-td" id="Platon-read"></td>
+            <tr id="Plato-tr">
+              <td>Plato</td>
+              <td class="clr-td" id="Plato-seat"></td>
+              <td class="clr-td" id="Plato-left-fork"></td>
+              <td class="clr-td" id="Plato-right-fork"></td>
+              <td class="clr-td" id="Plato-eats"></td>
+              <td class="clr-td" id="Plato-book"></td>
+              <td class="clr-td td-read" id="Plato-read"></td>
             </tr>
-            <tr id="Nietzsche-tr">
-              <td>Nietzsche</td>
-              <td class="clr-td" id="Nietzsche-seat"></td>
-              <td class="clr-td" id="Nietzsche-left-fork"></td>
-              <td class="clr-td" id="Nietzsche-right-fork"></td>
-              <td class="clr-td" id="Nietzsche-eats"></td>
-              <td class="clr-td" id="Nietzsche-book"></td>
-              <td class="clr-td" id="Nietzsche-read"></td>
-            </tr>
-            <tr id="Arystoteles-tr">
-              <td>Arystoteles</td>
-              <td class="clr-td" id="Arystoteles-seat"></td>
-              <td class="clr-td" id="Arystoteles-left-fork"></td>
-              <td class="clr-td" id="Arystoteles-right-fork"></td>
-              <td class="clr-td" id="Arystoteles-eats"></td>
-              <td class="clr-td" id="Arystoteles-book"></td>
-              <td class="clr-td" id="Arystoteles-read"></td>
+            <tr id="Aristotle-tr">
+              <td>Aristotle</td>
+              <td class="clr-td" id="Aristotle-seat"></td>
+              <td class="clr-td" id="Aristotle-left-fork"></td>
+              <td class="clr-td" id="Aristotle-right-fork"></td>
+              <td class="clr-td" id="Aristotle-eats"></td>
+              <td class="clr-td" id="Aristotle-book"></td>
+              <td class="clr-td td-read" id="Aristotle-read"></td>
             </tr>
             <tr id="Kant-tr">
               <td>Kant</td>
@@ -305,7 +313,16 @@
               <td class="clr-td" id="Kant-right-fork"></td>
               <td class="clr-td" id="Kant-eats"></td>
               <td class="clr-td" id="Kant-book"></td>
-              <td class="clr-td" id="Kant-read"></td>
+              <td class="clr-td td-read" id="Kant-read"></td>
+            </tr>
+            <tr id="Nietzsche-tr">
+              <td>Nietzsche</td>
+              <td class="clr-td" id="Nietzsche-seat"></td>
+              <td class="clr-td" id="Nietzsche-left-fork"></td>
+              <td class="clr-td" id="Nietzsche-right-fork"></td>
+              <td class="clr-td" id="Nietzsche-eats"></td>
+              <td class="clr-td" id="Nietzsche-book"></td>
+              <td class="clr-td td-read" id="Nietzsche-read"></td>
             </tr>
           </tbody>
         </table>
@@ -313,12 +330,19 @@
       <div class="history" id="history">
         <div class="history-header">History</div>
         <div class="statuses" id="statuses">
-          <!-- <div class="status">something happened 1</div>
-          <div class="status">something happened. 2</div>
-          <div class="status">something happened.. 3</div>
-          <div class="status">something happened... 4</div> -->
+          <!-- <div class="status">something happened 1</div> -->
         </div>
       </div>
+    </div>
+    <div class="deadlock-wrapper" id="deadlock-wrapper">
+      <div class="deadlock-info">
+        <!-- WASTED -->
+        DEADLOCK
+        <p class="deadlock-instruction">You need to reset your server</p>
+      </div>
+    </div>
+    <div class="connection-error" id="connection-error">
+      <div class="connection-error-info">Connection with server failed</div>
     </div>
     <script src="{% static 'js/script.js' %}" type="text/javascript"></script>
   </body>

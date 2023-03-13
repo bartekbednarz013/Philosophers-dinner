@@ -1,4 +1,4 @@
-from threading import Thread, Semaphore, Lock
+from threading import Thread, Semaphore, Lock, Event
 from random import randrange
 from time import sleep, perf_counter
 from datetime import datetime
@@ -19,7 +19,6 @@ class Philosopher(Thread):
         while b in self.read or self.dinner.books[b].locked():
             b = randrange(self.dinner.how_many_books)
         self.dinner.books[b].acquire()
-        # print("{} bierze książkę {}.   [{}]".format(self.id, b, datetime.now().strftime("%H:%M:%S.%f")))
         self.dinner.websocket.send(
             text_data=json.dumps(
                 {
@@ -36,11 +35,6 @@ class Philosopher(Thread):
         sleep(0.2 * self.dinner.time)
 
     def return_book(self):
-        # print(
-        #     "{} odkłada książkę {}. na półkę. Przeczytał już: {}   [{}]".format(
-        #         self.id, self.curr_reading, self.read, datetime.now().strftime("%H:%M:%S.%f")
-        #     )
-        # )
         self.dinner.websocket.send(
             text_data=json.dumps(
                 {
@@ -54,35 +48,16 @@ class Philosopher(Thread):
             )
         )
         self.dinner.books[self.curr_reading].release()
-
         sleep(0.2 * self.dinner.time)
-
-    # def take_seat(self):
-    #     if self.dinner.waiter:
-    #             self.dinner.waiter.acquire()
-    #             # print("Kelner wpuścił {}.   [{}]".format(self.id, datetime.now().strftime("%H:%M:%S.%f")))
-    #     s = randrange(self.dinner.how_many_seats)
-    #     while self.dinner.forks[s].locked():
-    #         s = randrange(self.dinner.how_many_seats)
-    #     self.dinner.forks[s].acquire()
-    #     self.seat = s
-    #     print(
-    #         "{} usiadł na miejscu {} i wziął lewy widelec ({}).   [{}]".format(
-    #             self.id, s, s, datetime.now().strftime("%H:%M:%S.%f")
-    #         )
-    #     )
-    #     sleep(0.25)
 
     def take_seat(self):
         if self.dinner.waiter:
             self.dinner.waiter.acquire()
-            # print("Kelner wpuścił {}.   [{}]".format(self.id, datetime.now().strftime("%H:%M:%S.%f")))
         s = randrange(self.dinner.how_many_seats)
         while self.dinner.seats[s].locked():
             s = randrange(self.dinner.how_many_seats)
         self.seat = s
         self.dinner.seats[s].acquire()
-        # print("{} usiadł na miejscu {}.   [{}]".format(self.id, s, datetime.now().strftime("%H:%M:%S.%f")))
         self.dinner.websocket.send(
             text_data=json.dumps(
                 {
@@ -104,7 +79,6 @@ class Philosopher(Thread):
             if not self.dinner.forks[s].locked():
                 self.dinner.forks[s].acquire()
                 forks = (True, forks[1])
-                # print("{} wziął lewy widelec ({}).   [{}]".format(self.id, s, datetime.now().strftime("%H:%M:%S.%f")))
                 self.dinner.websocket.send(
                     text_data=json.dumps(
                         {
@@ -120,9 +94,6 @@ class Philosopher(Thread):
             if not self.dinner.forks[s2].locked():
                 self.dinner.forks[s2].acquire()
                 forks = (forks[0], True)
-                # print(
-                #     "{} wziął prawy widelec ({}).   [{}]".format(self.id, s2, datetime.now().strftime("%H:%M:%S.%f"))
-                # )
                 self.dinner.websocket.send(
                     text_data=json.dumps(
                         {
@@ -136,14 +107,7 @@ class Philosopher(Thread):
                 )
                 sleep(0.1 * self.dinner.time)
 
-    # def pick_right_fork_up(self):
-    #     s = (self.seat + 1) % self.dinner.how_many_seats
-    #     self.dinner.forks[s].acquire()
-    #     print("{} wziął prawy widelec ({}).   [{}]".format(self.id, s, datetime.now().strftime("%H:%M:%S.%f")))
-    #     sleep(0.1)
-
     def eat(self):
-        # print("{} ma oba widelce i zaczyna jeść.   [{}]".format(self.id, datetime.now().strftime("%H:%M:%S.%f")))
         self.dinner.websocket.send(
             text_data=json.dumps(
                 {
@@ -154,9 +118,7 @@ class Philosopher(Thread):
                 }
             )
         )
-
         sleep(1 * self.dinner.time)
-        # print("{} skończył jeść.   [{}]".format(self.id, datetime.now().strftime("%H:%M:%S.%f")))
         self.dinner.websocket.send(
             text_data=json.dumps(
                 {
@@ -195,13 +157,10 @@ class Philosopher(Thread):
                 }
             )
         )
-        # print("{} odłożył lewy widelec (<{}).   [{}]".format(self.id, s, datetime.now().strftime("%H:%M:%S.%f")))
-        # print("{} odłożył prawy widelec (<{}).   [{}]".format(self.id, s2, datetime.now().strftime("%H:%M:%S.%f")))
         sleep(0.1 * self.dinner.time)
 
     def leave_table(self):
         self.dinner.seats[self.seat].release()
-        # print("{} wstaje i odchodzi od stołu.   [{}]".format(self.id, datetime.now().strftime("%H:%M:%S.%f")))
         self.dinner.websocket.send(
             text_data=json.dumps(
                 {
@@ -221,27 +180,40 @@ class Philosopher(Thread):
         while len(self.read) != self.dinner.how_many_books:
             self.choose_book()
             self.take_seat()
-            # self.pick_right_fork_up
             self.pick_forks_up()
             self.eat()
             self.put_forks_down()
             self.leave_table()
             self.return_book()
-        # print("{}  wychodzi.   [{}]".format(self.id, datetime.now().strftime("%H:%M:%S.%f")))
-        self.dinner.websocket.send(
-            text_data=json.dumps(
-                {
-                    "type": "dinner",
-                    "action": "leave",
-                    "person": self.id,
-                    "time": datetime.now().strftime("%H:%M:%S.%f"),
-                }
+            if self.dinner.event.is_set():
+                break
+
+        if len(self.read) == self.dinner.how_many_books:
+            self.dinner.websocket.send(
+                text_data=json.dumps(
+                    {
+                        "type": "dinner",
+                        "action": "leave",
+                        "person": self.id,
+                        "time": datetime.now().strftime("%H:%M:%S.%f"),
+                    }
+                )
             )
-        )
+        else:
+            self.dinner.websocket.send(
+                text_data=json.dumps(
+                    {
+                        "type": "dinner",
+                        "action": "evacuation",
+                        "person": self.id,
+                        "time": datetime.now().strftime("%H:%M:%S.%f"),
+                    }
+                )
+            )
 
 
-class ThreadDinner:
-    def __init__(self, websocket, guests_list: list, how_many_books: int, time: int, control=True):
+class DinnerMultithreading:
+    def __init__(self, websocket, guests_list: list, how_many_books: int, time: float, control=True):
         self.guests = guests_list
         self.how_many_seats = len(guests_list)
         self.seats = [Lock() for guest in guests_list]
@@ -251,14 +223,17 @@ class ThreadDinner:
         self.books = [Lock() for i in range(how_many_books)]
         self.websocket = websocket
         self.time = time
+        self.event = Event()
 
     def lets_get_it_started(self):
-        # print("{}   ZACZYNAMY UCZTĘ   -   wątki".format(datetime.now().strftime("%H:%M:%S.%f")))
-        # print()
-
         self.websocket.send(
             text_data=json.dumps(
-                {"type": "dinner", "message": "Dinner started!", "time": datetime.now().strftime("%H:%M:%S.%f")}
+                {
+                    "type": "dinner",
+                    "action": "dinner_started",
+                    "message": "Dinner started!",
+                    "time": datetime.now().strftime("%H:%M:%S.%f"),
+                }
             )
         )
 
@@ -271,14 +246,12 @@ class ThreadDinner:
         for philosopher in philosophers:
             philosopher.join()
         t2 = perf_counter()
-        # print()
-        # print("{}   UCZTA ZAKOŃCZONA. WSZYSCY POSZLI DO DOMU".format(datetime.now().strftime("%H:%M:%S.%f")))
-        # print()
-        # print("Czas trwania uczty:", t2 - t1, "sekund   -   wątki")
+
         self.websocket.send(
             text_data=json.dumps(
                 {
                     "type": "dinner",
+                    "action": "dinner_ended",
                     "message": "Dinner's over!",
                     "duration": t2 - t1,
                     "time": datetime.now().strftime("%H:%M:%S.%f"),
@@ -286,7 +259,5 @@ class ThreadDinner:
             )
         )
 
-
-# if __name__ == "__main__":
-#     dinner = ThreadDinner(["Sokrates", "Platon", "Nietzsche", "Arystoteles", "Kant"], 6)
-#     dinner.lets_get_it_started()
+    def stop(self):
+        self.event.set()
