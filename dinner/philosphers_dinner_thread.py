@@ -226,10 +226,14 @@ class DinnerMultithreading:
         self.event = Event()
 
     def lets_get_it_started(self):
-
         self.websocket.send(
             text_data=json.dumps(
-                {"type": "dinner", "action": "dinner_started", "message": "Dinner started!", "time": datetime.now().strftime("%H:%M:%S.%f")}
+                {
+                    "type": "dinner",
+                    "action": "dinner_started",
+                    "message": "Dinner started!",
+                    "time": datetime.now().strftime("%H:%M:%S.%f"),
+                }
             )
         )
 

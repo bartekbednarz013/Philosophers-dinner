@@ -38,9 +38,19 @@ body::-webkit-scrollbar {
   text-align: center;
 }
 
-.header-description {
-  margin: 0px 70px 70px;
+.description-wrapper {
+  margin: 0px 70px 40px;
   text-align: center;
+  font-weight: 500;
+}
+
+.dinner-description {
+  margin-bottom: 40px;
+}
+
+.instruction {
+  width: 65%;
+  margin: auto;
 }
 
 /* OPTIONS */
@@ -393,24 +403,55 @@ input::-webkit-inner-spin-button {
 }
 
 .fork-0 {
-  transform: translate(calc(59px * var(--scale)), calc(-81px * var(--scale)))
-    rotate(36deg);
+  transform: translate(calc(62px * var(--scale)), calc(-79px * var(--scale)))
+    rotate(38deg);
 }
+/* L0 */
+/* transform: translate(calc(37px * var(--scale)), calc(-93px * var(--scale)))
+    rotate(22deg); */
+/* P0 */
+/* transform: translate(calc(80px * var(--scale)), calc(-60px * var(--scale)))
+    rotate(53deg); */
 .fork-1 {
-  transform: translate(calc(95px * var(--scale)), calc(30px * var(--scale)))
-    rotate(108deg);
+  transform: translate(calc(94px * var(--scale)), calc(34px * var(--scale)))
+    rotate(110deg);
 }
+/* L1 */
+/* transform: translate(calc(99px * var(--scale)), calc(10px * var(--scale)))
+    rotate(96deg); */
+/* P1 */
+/* transform: translate(calc(82px * var(--scale)), calc(57px * var(--scale)))
+    rotate(125deg); */
 .fork-2 {
-  transform: translate(0px, calc(100px * var(--scale))) rotate(180deg);
+  transform: translate(calc(-2px * var(--scale)), calc(100px * var(--scale)))
+    rotate(181deg);
 }
+/* L2 */
+/* transform: translate(calc(24px * var(--scale)), calc(97px * var(--scale)))
+    rotate(166deg); */
+/* P2 */
+/* transform: translate(calc(-28px * var(--scale)), calc(96px * var(--scale)))
+    rotate(196deg); */
 .fork-3 {
-  transform: translate(calc(-95px * var(--scale)), calc(30px * var(--scale)))
-    rotate(252deg);
+  transform: translate(calc(-95px * var(--scale)), calc(33px * var(--scale)))
+    rotate(251deg);
 }
+/* L3 */
+/* transform: translate(calc(-83px * var(--scale)), calc(56px * var(--scale)))
+    rotate(236deg); */
+/* P3 */
+/* transform: translate(calc(-100px * var(--scale)), calc(7px * var(--scale)))
+    rotate(266deg); */
 .fork-4 {
-  transform: translate(calc(-59px * var(--scale)), calc(-81px * var(--scale)))
-    rotate(324deg);
+  transform: translate(calc(-60px * var(--scale)), calc(-80px * var(--scale)))
+    rotate(323deg);
 }
+/* L4 */
+/* transform: translate(calc(-79px * var(--scale)), calc(-62px * var(--scale)))
+    rotate(308deg); */
+/* P4 */
+/* transform: translate(calc(-37px * var(--scale)), calc(-93px * var(--scale)))
+    rotate(338deg); */
 
 .waiter {
   height: calc(350px * var(--scale));
@@ -591,4 +632,42 @@ td {
   color: rgb(81, 82, 250);
   text-decoration: none;
   font-weight: 600;
+}
+
+.connection-error,
+.deadlock-wrapper {
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.connection-error-info,
+.deadlock-info {
+  width: 100%;
+  position: absolute;
+  top: calc(50% - 50px);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 50px;
+  line-height: 100px;
+  text-align: center;
+}
+
+.deadlock-wrapper {
+  display: none;
+}
+
+.deadlock-info {
+  top: calc(50% - 100px);
+  font-size: 100px;
+  line-height: 200px;
+}
+
+.deadlock-instruction {
+  font-size: 17px;
+  line-height: 17px;
+  margin-bottom: 10px;
+  margin-top: -27px;
 }
