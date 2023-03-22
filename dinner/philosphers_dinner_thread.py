@@ -73,7 +73,7 @@ class Philosopher(Thread):
 
     def pick_forks_up(self):
         s = self.seat
-        s2 = (s + 1) % self.dinner.how_many_seats
+        s2 = (s - 1) % self.dinner.how_many_seats
         forks = (False, False)
         while forks != (True, True):
             if not self.dinner.forks[s].locked():
@@ -132,8 +132,7 @@ class Philosopher(Thread):
 
     def put_forks_down(self):
         s = self.seat
-        s2 = (s + 1) % self.dinner.how_many_seats
-        self.dinner.forks[s].release()
+        s2 = (s - 1) % self.dinner.how_many_seats
         self.dinner.websocket.send(
             text_data=json.dumps(
                 {
@@ -145,7 +144,7 @@ class Philosopher(Thread):
                 }
             )
         )
-        self.dinner.forks[s2].release()
+        self.dinner.forks[s].release()
         self.dinner.websocket.send(
             text_data=json.dumps(
                 {
@@ -157,6 +156,7 @@ class Philosopher(Thread):
                 }
             )
         )
+        self.dinner.forks[s2].release()
         sleep(0.1 * self.dinner.time)
 
     def leave_table(self):
