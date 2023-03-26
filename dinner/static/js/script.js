@@ -48,7 +48,7 @@ const forks_transform = {
   4: {
     neutral:
       'translate(calc(-60px * var(--scale)), calc(-80px * var(--scale))) rotate(323deg)',
-    left: 'translate(calc(-79px * var(--scale)), calc(-62px * var(--scale))) rotate(308deg)',
+    left: 'translate(calc(-80px * var(--scale)), calc(-60px * var(--scale))) rotate(307deg)',
     right:
       'translate(calc(-37px * var(--scale)), calc(-93px * var(--scale))) rotate(338deg)',
   },
@@ -94,11 +94,14 @@ dinnerSocket.onmessage = function (e) {
     case 'choose_book':
       document.getElementById(`book${data.book}`).style.display = 'none';
       document.getElementById(`${data.person}-book`).innerHTML = data.book;
+      if (document.getElementById(`${data.person}-waiting`)) {
+        document.getElementById(`${data.person}-waiting`).remove();
+      }
       document
         .getElementById('waiting-room')
         .insertAdjacentHTML(
           'beforeend',
-          `<div class="patient-guest" id="${data.person}-waiting">${data.person} (book ${data.book})</div>`
+          `<div class="patient-guest" id="${data.person}-waiting-with-book"><img class="head" src="static/images/heads/${data.person}.png" /> (book ${data.book})</div>`
         );
       history.insertAdjacentHTML(
         'afterbegin',
@@ -115,9 +118,11 @@ dinnerSocket.onmessage = function (e) {
       );
       break;
     case 'take_seat':
-      document.getElementById(`${data.person}-waiting`).remove();
+      document.getElementById(`${data.person}-waiting-with-book`).remove();
       document.getElementById(`${data.person}-seat`).innerHTML = data.seat;
-      document.getElementById(`seat${data.seat}`).innerHTML = data.person;
+      document.getElementById(
+        `seat${data.seat}`
+      ).innerHTML = `<img class="head" src="static/images/heads/${data.person}.png" />`;
       history.insertAdjacentHTML(
         'afterbegin',
         `<div class="status">${data.person} takes a seat ${data.seat}.   [${data.time}]</div>`
@@ -126,6 +131,12 @@ dinnerSocket.onmessage = function (e) {
     case 'leave_table':
       document.getElementById(`seat${data.seat}`).innerHTML = '';
       document.getElementById(`${data.person}-seat`).innerHTML = '';
+      document
+        .getElementById('waiting-room')
+        .insertAdjacentHTML(
+          'beforeend',
+          `<div class="patient-guest" id="${data.person}-waiting"><img class="head" src="static/images/heads/${data.person}.png" /></div>`
+        );
       history.insertAdjacentHTML(
         'afterbegin',
         `<div class="status">${data.person} left the table. Seat ${data.seat} is empty again.   [${data.time}]</div>`
@@ -182,6 +193,7 @@ dinnerSocket.onmessage = function (e) {
       );
       break;
     case 'leave':
+      document.getElementById(`${data.person}-waiting`).remove();
       history.insertAdjacentHTML(
         'afterbegin',
         `<div class="status">${data.person} read all books and left.   [${data.time}]</div>`
@@ -190,6 +202,7 @@ dinnerSocket.onmessage = function (e) {
         'rgba(255, 95, 165, 0.2)';
       break;
     case 'evacuation':
+      document.getElementById(`${data.person}-waiting`).remove();
       history.insertAdjacentHTML(
         'afterbegin',
         `<div class="status">${data.person} left.   [${data.time}]</div>`
