@@ -21,9 +21,9 @@
             Multithreading implementation of solution of the Dining Philosophers
             Problem, but this time our philosophers are reading while eating.
             Dinner ends when everybody read all of the books. Each philospher
-            choose book he hadn't already read, next choose seat and try to get
-            forks. All choices are random. Waiter watches over the dinner and
-            allows max four people to the table at the time.
+            chooses a book he hadn't already read, next takes a seat and than
+            tries to get forks. All choices are random. Waiter watches over the
+            dinner and allows max four people to the table at the time.
           </p>
           <p class="instruction">
             Decide how many books are on the bookcase and adjust how long
@@ -108,11 +108,11 @@
             <div class="seat-content seat-content-4" id="seat4"></div>
           </div>
           <div class="dinner-table">
-            <div class="plate first-plate">0.</div>
-            <div class="plate second-plate">1.</div>
-            <div class="plate third-plate">2.</div>
-            <div class="plate fourth-plate">3.</div>
-            <div class="plate fifth-plate">4.</div>
+            <div class="plate first-plate">0</div>
+            <div class="plate second-plate">1</div>
+            <div class="plate third-plate">2</div>
+            <div class="plate fourth-plate">3</div>
+            <div class="plate fifth-plate">4</div>
             <div class="fork fork-0" id="fork0">
               <svg
                 width="100%"
@@ -280,7 +280,12 @@
           </thead>
           <tbody>
             <tr id="Socrates-tr">
-              <td>Socrates</td>
+              <td>
+                <img
+                  class="head-mini"
+                  src="static/images/heads/Socrates.png"
+                />Socrates
+              </td>
               <td class="clr-td" id="Socrates-seat"></td>
               <td class="clr-td" id="Socrates-left-fork"></td>
               <td class="clr-td" id="Socrates-right-fork"></td>
@@ -289,7 +294,12 @@
               <td class="clr-td td-read" id="Socrates-read"></td>
             </tr>
             <tr id="Plato-tr">
-              <td>Plato</td>
+              <td>
+                <img
+                  class="head-mini"
+                  src="static/images/heads//Plato.png"
+                />Plato
+              </td>
               <td class="clr-td" id="Plato-seat"></td>
               <td class="clr-td" id="Plato-left-fork"></td>
               <td class="clr-td" id="Plato-right-fork"></td>
@@ -298,7 +308,12 @@
               <td class="clr-td td-read" id="Plato-read"></td>
             </tr>
             <tr id="Aristotle-tr">
-              <td>Aristotle</td>
+              <td>
+                <img
+                  class="head-mini"
+                  src="static/images/heads/Aristotle.png"
+                />Aristotle
+              </td>
               <td class="clr-td" id="Aristotle-seat"></td>
               <td class="clr-td" id="Aristotle-left-fork"></td>
               <td class="clr-td" id="Aristotle-right-fork"></td>
@@ -307,7 +322,9 @@
               <td class="clr-td td-read" id="Aristotle-read"></td>
             </tr>
             <tr id="Kant-tr">
-              <td>Kant</td>
+              <td>
+                <img class="head-mini" src="static/images/heads/Kant.png" />Kant
+              </td>
               <td class="clr-td" id="Kant-seat"></td>
               <td class="clr-td" id="Kant-left-fork"></td>
               <td class="clr-td" id="Kant-right-fork"></td>
@@ -316,7 +333,12 @@
               <td class="clr-td td-read" id="Kant-read"></td>
             </tr>
             <tr id="Nietzsche-tr">
-              <td>Nietzsche</td>
+              <td>
+                <img
+                  class="head-mini"
+                  src="static/images/heads/Nietzsche.png"
+                />Nietzsche
+              </td>
               <td class="clr-td" id="Nietzsche-seat"></td>
               <td class="clr-td" id="Nietzsche-left-fork"></td>
               <td class="clr-td" id="Nietzsche-right-fork"></td>
@@ -336,7 +358,6 @@
     </div>
     <div class="deadlock-wrapper" id="deadlock-wrapper">
       <div class="deadlock-info">
-        <!-- WASTED -->
         DEADLOCK
         <p class="deadlock-instruction">You need to reset your server</p>
       </div>

@@ -31,17 +31,18 @@ body::-webkit-scrollbar {
 
 .header-wrapper {
   margin-bottom: 140px;
+  min-height: calc(100vh - 140px);
 }
 
 .page-header h1 {
-  padding: 40px 40px 20px;
+  padding: 30px 40px 25px;
   text-align: center;
+  font-weight: 500;
 }
 
 .description-wrapper {
-  margin: 0px 70px 40px;
+  margin: 0px 70px 30px;
   text-align: center;
-  font-weight: 500;
 }
 
 .dinner-description {
@@ -51,12 +52,13 @@ body::-webkit-scrollbar {
 .instruction {
   width: 65%;
   margin: auto;
+  font-weight: 500;
 }
 
 /* OPTIONS */
 .options-wrapper {
   width: 400px;
-  margin: 40px auto 0px;
+  margin: auto;
 }
 
 .options {
@@ -87,7 +89,7 @@ body::-webkit-scrollbar {
   text-align: center;
   margin: 10px;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .implementation-switch,
@@ -318,7 +320,7 @@ input::-webkit-inner-spin-button {
     rotate(288deg);
 }
 
-.seat-content {
+/* .seat-content {
   position: absolute;
   width: calc(100px * var(--scale));
   height: calc(30px * var(--scale));
@@ -327,6 +329,16 @@ input::-webkit-inner-spin-button {
   z-index: 1;
   text-align: center;
   font-size: calc(17px * var(--scale));
+} */
+
+.seat-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 1;
 }
 
 .seat-content-1 {
@@ -340,6 +352,17 @@ input::-webkit-inner-spin-button {
 }
 .seat-content-4 {
   transform: rotate(-288deg);
+}
+
+.head {
+  height: calc(80px * var(--scale));
+}
+
+.head-mini {
+  height: 20px;
+  position: relative;
+  top: 4px;
+  margin-right: 7px;
 }
 
 .dinner-table {
@@ -447,8 +470,8 @@ input::-webkit-inner-spin-button {
     rotate(323deg);
 }
 /* L4 */
-/* transform: translate(calc(-79px * var(--scale)), calc(-62px * var(--scale)))
-    rotate(308deg); */
+/* transform: translate(calc(-80px * var(--scale)), calc(-60px * var(--scale)))
+    rotate(307deg); */
 /* P4 */
 /* transform: translate(calc(-37px * var(--scale)), calc(-93px * var(--scale)))
     rotate(338deg); */
@@ -478,7 +501,10 @@ input::-webkit-inner-spin-button {
 .patient-guest {
   height: calc(50px * var(--scale));
   width: 100%;
-  text-align: center;
+  display: flex;
+  column-gap: 15px;
+  align-items: center;
+  justify-content: center;
   line-height: calc(50px * var(--scale));
   font-size: calc(20px * var(--scale));
 }
