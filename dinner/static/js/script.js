@@ -80,7 +80,7 @@ dinnerSocket.onmessage = function (e) {
           data.message
         }</b> Duration: ${data.duration.toFixed(6)}s    [${
           data.time
-        }]<br><a href="#header">Try again!</a></div>`
+        }]<br><a id="try-again" href="#header">Try again!</a></div>`
       : `<div class="status special-status"><b>${data.message}</b>    [${data.time}]</div>`;
     history.insertAdjacentHTML('afterbegin', html);
   }
@@ -215,6 +215,7 @@ dinnerSocket.onmessage = function (e) {
       stop_dinner_button.style.display = 'none';
       start_dinner_button.style.display = 'block';
       unlockBackend();
+      document.getElementById('try-again').scrollIntoView();
       break;
   }
 };
