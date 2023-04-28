@@ -22,5 +22,5 @@ This time our philosophers are reading while eating. Dinner ends when everybody 
 <img src="https://user-images.githubusercontent.com/65030121/235091622-c4448601-f4e8-4a8e-958a-0f2150ae69d1.jpg">
 <img src="https://user-images.githubusercontent.com/65030121/235091681-ce99a868-62bb-4df8-8554-782aaf0dc669.jpg">
 
-<h4>When dinner ends</h4>
+<h4>After dinner ends</h4>
 <img src="https://user-images.githubusercontent.com/65030121/235091844-10c381fb-cf95-447b-b698-1775bdce74b8.jpg">
