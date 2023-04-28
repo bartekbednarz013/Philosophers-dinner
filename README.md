@@ -24,3 +24,20 @@ This time our philosophers are reading while eating. Dinner ends when everybody 
 
 <h4>After dinner ends</h4>
 <img src="https://user-images.githubusercontent.com/65030121/235091844-10c381fb-cf95-447b-b698-1775bdce74b8.jpg">
+
+## Get started
+**1. Clone repository.**
+```
+git clone https://github.com/bartekbednarz013/Philosophers-dinner.git
+```
+**2. Install dependencies.**
+```
+pip install -r requirements.txt
+```
+**3. Go to settings.py and replace environment variable with your SECRET_KEY.**
+
+**4. Run server.**
+```
+python manage.py runserver
+```
+**5. Open** ```http://127.0.0.1:5000/``` **in your browser.**
