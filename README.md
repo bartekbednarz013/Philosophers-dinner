@@ -34,7 +34,7 @@ git clone https://github.com/bartekbednarz013/Philosophers-dinner.git
 ```
 pip install -r requirements.txt
 ```
-**3. Go to settings.py and replace environment variable with your SECRET_KEY.**
+**3. Go to ***settings.py*** and replace environment variable with your ***SECRET_KEY***.**
 
 **4. Run server.**
 ```
