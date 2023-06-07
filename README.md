@@ -1,15 +1,15 @@
 # Philosophers dinner
-Web application that implements solution of Dining Philosophers Problem (with a slight change) and illustrates course of the dinner.
+Single page web application that implements solution of Dining Philosophers Problem (with a slight change) and illustrates course of the dinner.
 
 This time our philosophers are reading while eating. Dinner ends when everybody read all of the books. Each philospher chooses a book he hadn't already read, next takes a seat and than tries to get forks. All choices are random. Waiter watches over the dinner and allows max four people to the table at the time.
 
 
 
 ## Tech Stack
-- Django 4.1.7
-- Channels 3.0.5
+- Django
+- Django Channels
+- WebSocket
 
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Django?color=yellowgreen&logo=Python)
 
 ## Screenshots
 <h4>Initial page</h4>
